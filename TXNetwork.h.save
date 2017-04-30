@@ -1,7 +1,7 @@
 //{=============================================================================
-//           Библиотека TXNetwork - TXNetwork.h
-//           Copyright (C)  Vova Yurovsky, 7 класс - source code
-//                          Vova Yurovsky, 8 класс - help
+//  Библиотека TXNetwork - TXNetwork.h
+//  Copyright (C) Vova Yurovsky, 7 класс - Source code
+//                Vova Yurovsky, 8 класс - Help
 //}=============================================================================
 
 //{================================DOXYGEN======================================
@@ -17,7 +17,7 @@
 //!
 //!             А также сообщайте мне обо всем (e-mail: vova@txlib.ru).
 //!
-//! @version    0.5.2a
+//! @version    0.6.3a
 //!
 //! @author     Copyright (C) _RedMan_ (Vova Yurovsky) <vova@txlib.ru>, 7-8 класс
 //! @date       2015-2016
@@ -31,7 +31,7 @@
 //!             Так как библиотека находится на стадии тестирования, то просьба писать мне (автору) обо всех
 //!             с ней проблемах по адресу: <vova@txlib.ru>.
 //!
-//! @par        Как и с чем это @strike есть @endstrike использовать?
+//! @par        Как и с чем это использовать?
 //!             Библиотека TXNetwork использует другие библиотеки, которые используют технологию раздельной
 //!             компиляции. Для работы TXNetwork @b нужно в настройках линкера @b указать компоновку
 //!             с библиотекой @c @b ws2_32. @nn
@@ -41,45 +41,50 @@
 //!             @strike котов @endstrike готов к работе с вами. @nn
 //!             Либо в командной строке компилятора надо указать опцию @c -l @c ws2_32.
 //! @par
-//!             Так же не забудьте указать путь к TXLib'у (если у вас путь не стандартный), определив @c __TXLIB_PATH
 //!
-//! @warning    <b>Библиотека находится в состоянии альфа-тестирования. Обо всех ошибках сообщайте
+//! @warning -#  <b>Библиотека находится в состоянии альфа-тестирования. Обо всех ошибках сообщайте
 //!             на почту vova@txlib.ru.</b>
 //!
-//! @warning    При использовании совместно с TXLib:
-//!          -# Перед подключением TXLib'a определите макрос WINVER (это версия Windows, для которой ведется
-//!             разработка) не менее, чем 0x0501 с помощью #define.
-//!          -# Подключайте TXNetwork после TXLib'a. А можно и вместо него.
+//! @warning -#  <b>При использовании совместно с TXLib:
+//!             Подключайте TXNetwork <b>ПЕРЕД</b> TXLib'ом </b>.
+//!
+//! @warning -#  <b>TXNetwork удаляет определение (\#undef) __STRICT_ANSI__ для совместимости с TXLib'ом</b>
 //!
 //! @section    Contents Разделы системы помощи
 //! @par
 //!           - @ref TXSocket "Компоненты TXNetwork"
+//!           - @ref TXNERCO  "Коды ошибок TXNetwork"
 //!
-//!             
+//! @section    SimpleExample Очень простой пример
 //!
-//! @par        Файл: proto.h - общие структуры и константы клиента и сервера
+//! @par        Файл: proto.h
+//!             общие структуры и константы клиента и сервера
 //! @include   "Examples/Example00/proto.h"
 //!
 //! @par        Файл: server.cpp
 //!             Смотрите помощь по функциям TXNetwork - нажимайте на светло-синенькое :)
 //! @include   "Examples/Example00/server.cpp"
 //!
-//! @section    ExampleClient  Пример клиента
+//! @par        Файл: client.cpp
+//!             Смотрите помощь по функциям TXNetwork - нажимайте на светло-синенькое :)
 //! @include   "Examples/Example00/client.cpp"
 //!
-//! @par        Другие примеры:
+//! @par
+//!          -  @ref Example0      "Подробное описание простейшего примера."
 //!
+//! @section    OtherExamples       Другие примеры:
+//!
+//! @par
 //!          -  @ref Example1      "Первый пример"
 //!          -  @ref Example2      "Второй пример"
 //!          -  @ref Example3      "Третий пример"
 //!          -  @ref Example4      "Четвертый пример"
-//!          -  @ref Example5      "Пятый пример"
 //!          -  @ref ExampleYours  "Твой личный пример!"
 //!
-//! @defgroup   TXSocket  Сокет TXNetwork
-//! @defgroup   TXNERCO   Коды ошибок TXNetwork
+//! @defgroup   TXSocket            Сокет TXNetwork
+//! @defgroup   TXNERCO             Коды ошибок TXNetwork
 //!
-//} =============================================================================
+//}=============================================================================
 
 #ifndef TXN_H
 #define TXN_H
@@ -91,16 +96,14 @@
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 //}
 
-//Includes (##-INTERNAL-##)
-//{
+//{ Includes (##-INTERNAL-##)
 //! @cond INTERNAL
 
 #ifdef __TXLIB_H_INCLUDED
 
-#warning -----------------------------------------------------------------------
-#warning Do not include TXLib before TXNetwork.
-#warning NOTE: TXNetwork will include TXLib automaticly.
-#warning -----------------------------------------------------------------------
+#error -----------------------------------------------------------------------
+#error Do not include TXLib before TXNetwork.
+#error -----------------------------------------------------------------------
 
 #endif
 
@@ -136,26 +139,18 @@
 
 #endif
 
-#ifndef __TXLIB_PATH
-
-#define __TXLIB_PATH "TXLib.h"
-
-#endif
-
 #pragma GCC system_header
 
 #undef  __STRICT_ANSI__
 
 #include <ws2tcpip.h>
-#include __TXLIB_PATH
-
-#define __STRICT_ANSI__
+#include <stdio.h>
+#include <assert.h>
 
 //! @endcond
 //}
 
-//defines, typedefs
-//{
+//{ defines, typedefs
 
 //! @ingroup TXSocket
 //! @brief   Широковещательный IP-адрес TXNetwork'a
@@ -163,6 +158,7 @@
 //! IP-адрес, с которого все компьютеры принимают сообщения, посланые на этот адрес.
 
 #define TX_BROADCAST    "255.255.255.255"
+#define TX_BROADCAT      TX_BROADCAST       // For compatibility with other cats. ^^ :)
 
 //! @ingroup TXSocket
 //! @brief   Стандартный порт TXNetwork'a
@@ -186,14 +182,14 @@
 #define TXN_NOT_CREATED 101
 
 //! @ingroup TXNERCO
-//! @brief   Сокет впорядке.
+//! @brief   Сокет в порядке.
 //!
 //! Возвращается txnAssert'ом.
 
 #define TXN_OK          100
 
 //! @ingroup TXNERCO
-//! @brief   Сокет в порядке.
+//! @brief   Ошибка сокета.
 //!
 //! Возвращается функциями класса TX_SOCKET при приеме/передаче данных.
 
@@ -224,25 +220,68 @@ enum sock_type
 // The Classes
 //{
 
+//! @cond INTERNAL
+
+class txSmartSocket_
+{
+SOCKET sock;
+unsigned int num_of_ref;
+
+txSmartSocket_ (const txSmartSocket_& var) = delete;
+txSmartSocket_& operator= (txSmartSocket_& what) = delete;
+
+public:
+    txSmartSocket_ ():
+    sock(INVALID_SOCKET),
+    num_of_ref(0)
+    {}
+
+    txSmartSocket_ (SOCKET var):
+    sock (var),
+    num_of_ref (1)
+    {}
+
+    txSmartSocket_ (txSmartSocket_&& var):
+    sock(var.sock),
+    num_of_ref(var.num_of_ref)
+    {
+    var.sock = NULL;
+    var.num_of_ref = 0;
+    }
+
+    ~txSmartSocket_()
+    {
+    if (sock);
+        closesocket(sock);
+    }
+
+SOCKET& operator*();
+
+txSmartSocket_* Create();
+txSmartSocket_* Delete();
+};
+
+//! @endcond
+
 class TX_SOCKET
     {
     //! @cond INTERNAL
 
-    bool      _broadcats; //^_^
+    bool      _broadcats;  // ^_^
     bool      _TCP;
     bool      _init;
     sock_type _type;
 
-    SOCKET      _sock;
+    txSmartSocket_* _sock;
     sockaddr_in _sock_addr;
 
-    SOCKET      _client_sock_for_serv;
+    txSmartSocket_* _client_sock_for_serv;
     sockaddr_in _client_addr;
 
     sock_type _type_;
 
-    bool _txInitAsServer (const char*,    u_short port, sock_type type, bool useTCP);
-    bool _txInitAsClient (const char* IP, u_short port, sock_type type, bool useTCP);
+    bool _txInitAsServer (const char*,    u_short port, sock_type type, bool useTCP, const unsigned OueueSize);
+    bool _txInitAsClient (const char* IP, u_short port, sock_type type, bool useTCP, const unsigned);
 
     public:
 
@@ -263,36 +302,45 @@ class TX_SOCKET
         _TCP (that._TCP),
         _init (that._init),
         _type (that._type),
-        _sock (that._sock),
+        _sock (_init? that._sock -> Create() : NULL),
         _sock_addr (that._sock_addr),
-        _client_sock_for_serv (that._client_sock_for_serv),
+        _client_sock_for_serv (that._client_sock_for_serv? that._client_sock_for_serv -> Create() : NULL),
         _client_addr (that._client_addr),
         _type_ (that._type_)
         {}
 
-    TX_SOCKET (sock_type type, const char* IP, int port, sock_type blocking, bool useTCP):
+    TX_SOCKET (sock_type type, const char* IP, int port, sock_type blocking, bool useTCP, const unsigned OueueSize):
         _broadcats(),
         _TCP (useTCP),
         _init (false),
         _type (type),
-        _sock (socket (AF_INET, SOCK_STREAM, 0)),
+        _sock (0),
         _sock_addr(),
         _client_sock_for_serv(),
         _client_addr(),
         _type_ (blocking)
         {
-        assert (IP);
-
-        _broadcats = ! (strcmp (IP, TX_BROADCAST));                                   // broadcats :)
+        if (IP == NULL)
+            {
+            if (type == TX_SERVER)
+                _broadcats = false;
+            else
+                return;
+            }
+        else
+            {
+            assert (IP);
+            _broadcats = ! (strcmp (IP, TX_BROADCAST));          // TX_BROADCAT :)
+            }
 
         switch (_type)
             {
             case TX_CLIENT:   if (! (this->*(_broadcats? &TX_SOCKET :: _txInitAsServer : &TX_SOCKET :: _txInitAsClient))
-                                    (IP, (u_short) port, _type_, useTCP)) return;
+                                    (IP, (u_short) port, _type_, useTCP, OueueSize)) return;
                               break;
 
             case TX_SERVER:   if (! (this->*(_broadcats? &TX_SOCKET :: _txInitAsClient : &TX_SOCKET :: _txInitAsServer))
-                                    (IP, (u_short) port, _type_, useTCP)) return;
+                                    (IP, (u_short) port, _type_, useTCP, OueueSize)) return;
                               break;
 
             case TX_BLOCK:
@@ -308,21 +356,21 @@ class TX_SOCKET
 
     ~TX_SOCKET()
         {
-        closesocket (_sock);
-        closesocket (_client_sock_for_serv);
+        if (_sock) _sock -> Delete();
+        if (_client_sock_for_serv) _client_sock_for_serv -> Delete();
         }
-
-    //! @endcond
 
         friend int txSendTo   (TX_SOCKET& to, const void* buf, int size_buf);
         friend int txRecvFrom (TX_SOCKET& to, void* buf, int size_buf);
         friend int txnAssert  (TX_SOCKET& asr);
         friend int txChangeSockType   (TX_SOCKET& to, sock_type blocking);
-        friend SOCKET* txGetWinSocket (TX_SOCKET& what);
+        friend SOCKET* txGetWinSocket (TX_SOCKET& what, bool main = true);
+    //! @endcond
     };
+
 //}
 
-//prototypes
+// prototypes
 //{
     /** @ingroup TXSocket
      *  @brief   Создаёт сокет TXNetwork.
@@ -333,6 +381,7 @@ class TX_SOCKET
      *  @param   port      Порт компьютеров, на котором будет "висеть" сокет.
      *  @param   blocking  Тип сокета (блокирующий или неблокирующий).
      *  @param   useTCP    Если false, то используется протокол UDP. Иначе TCP.
+     *  @param   OueueSize @strike Черная магия @endstrike Размер очереди обрабатываемых клиентов для listen. Use Google, Luck
      *
      *  @return  Сокет TXNetwork'a.
      *
@@ -345,8 +394,8 @@ class TX_SOCKET
      *  @endcode
      */
 
-    TX_SOCKET txCreateSocket (sock_type type, const char* IP, int port = TX_STD_PORT,
-                              sock_type blocking = TX_BLOCK, bool useTCP = true);
+    TX_SOCKET txCreateSocket (sock_type type, const char* IP = NULL, int port = TX_STD_PORT,
+                              sock_type blocking = TX_BLOCK, bool useTCP = true, const unsigned OueueSize = 0x10);
 
     //! @ingroup TXSocket
     //! @brief   Функция для отправки данных через сокет
@@ -357,7 +406,7 @@ class TX_SOCKET
     //! @param   buf       Буфер, который будет передан.
     //! @param   size_buf  Размер буфера.
     //!
-    //! @return  Код ошибки. Подробнее см. MSDN.
+    //! @return  Созданный сокет. Рекомендуется проверять, создался ли он.
     //! @par     Пример 1
     //! @code
     //!          TX_SOCEKT game_server = txCreateSocket (...);    // Создаем сокет
@@ -396,7 +445,7 @@ class TX_SOCKET
     //! @param   buf       Буфер, который в будет записан массив.
     //! @param   size_buf  Размер буфера.
     //!
-    //! @return  Код ошибки. Подробнее см. MSDN.
+    //! @return  Код ошибки. Подробнее см. MSDN. Поиск по словам .
     //! @par     Пример 1
     //! @code
     //!          TX_SOCEKT game_server = txCreateSocket (...);      // Создаем сокет
@@ -459,21 +508,49 @@ class TX_SOCKET
     //! @brief   Cокет TXLib'a.
     //!
     //! @param   what  Сокет TXLib'a, сокет которого нужно вернуть.
+    //! @param   main  Часть сокета TXLib'a, короую нужно вернуть.
     //!
     //! @return  Указатель на сокет winsock'a.
 
-    SOCKET* txGetWinSocket (TX_SOCKET& what);
+    SOCKET* txGetWinSocket (TX_SOCKET& what, bool main/* = true*/);
 
 //}
 
-//definitions (##--INTERANL--##)
+// definitions (##--INTERANL--##)
 //{
 //! @cond INTERNAL
 
-//TX_SOCKET
+// txSmartSocket_
 //{
 
-bool TX_SOCKET :: _txInitAsServer (const char*, u_short port, sock_type blocking, bool useTCP)
+SOCKET& txSmartSocket_ :: operator*()
+{
+return sock;
+}
+
+txSmartSocket_* txSmartSocket_ :: Create()
+{
+num_of_ref++;
+
+return this;
+}
+
+txSmartSocket_* txSmartSocket_ :: Delete()
+{
+if (num_of_ref == 0 && sock != INVALID_SOCKET)
+    delete this;
+else
+    num_of_ref--;
+
+return this;
+}
+
+//}
+
+// TX_SOCKET
+//{
+
+bool TX_SOCKET :: _txInitAsServer (const char*, u_short port, sock_type blocking, bool useTCP, const unsigned OueueSize)
     {
     addrinfo hints    = {};
     hints.ai_family   = AF_INET;
@@ -491,58 +568,93 @@ bool TX_SOCKET :: _txInitAsServer (const char*, u_short port, sock_type blocking
     int err = getaddrinfo (NULL, str, &hints, &servinfo);
     if (err == -1) return false;
 
-    _sock = 0;
+    _sock = NULL;
     for (addrinfo* p = servinfo; p; p = p->ai_next)
         {
-        _sock = socket (p->ai_family, p->ai_socktype, p->ai_protocol);
+        _sock = new txSmartSocket_ (socket (p->ai_family, p->ai_socktype, p->ai_protocol));
 
-        if ( (int) _sock == -1) continue;
-
-        if (bind (_sock, p->ai_addr, int (p->ai_addrlen)) == -1)
+        if (_sock == NULL)
             {
-            closesocket (_sock);
+            return false;
+            }
+
+        if ( (int) **_sock == -1)
+            {
+            delete _sock;
+            continue;
+            }
+
+        if (bind (**_sock, p->ai_addr, int (p->ai_addrlen)) == -1)
+            {
+            delete _sock;
             continue;
             }
 
         break;
         }
 
-    if (!_sock) return false;
+    if (_sock == NULL)
+        {
+        return false;
+        }
+
+    if (!**_sock)
+        {
+        delete _sock;
+        return false;
+        }
 
     freeaddrinfo (servinfo);
 
     if (useTCP)
         {
-        if (listen (_sock, 0x10)) return false;
+        if (listen (**_sock, OueueSize)) return false;
 
         int client_addr_size = sizeof (_client_addr);
 
-        _client_sock_for_serv = accept (_sock, (sockaddr* ) &_client_addr, &client_addr_size);
+        _client_sock_for_serv = new txSmartSocket_(accept (**_sock, (sockaddr* ) &_client_addr, &client_addr_size));
 
-        if (_client_sock_for_serv == 0) return false;
+        if (_client_sock_for_serv == NULL)
+
+        if (**_client_sock_for_serv == 0)
+            {
+            delete _client_sock_for_serv;
+            return false;
+            }
         }
 
     if (blocking == TX_NONBLOCK)
         {
         u_long nonblocking = 1;
-        if (ioctlsocket (_client_sock_for_serv, FIONBIO, &nonblocking) == SOCKET_ERROR) return false;
+        if (ioctlsocket (**_client_sock_for_serv, FIONBIO, &nonblocking) == SOCKET_ERROR)
+            {
+            delete _client_sock_for_serv;
+            return false;
+            }
         }
 
     return true;
     }
 
-bool TX_SOCKET :: _txInitAsClient (const char* IP, u_short port, sock_type blocking, bool useTCP)
+bool TX_SOCKET :: _txInitAsClient (const char* IP, u_short port, sock_type blocking, bool useTCP, const unsigned)
     {
     hostent* he = gethostbyname (IP);
 
-    _sock = useTCP? socket (AF_INET, SOCK_STREAM, IPPROTO_IP) :
-                    socket (AF_INET, SOCK_DGRAM, _broadcats? 0 : IPPROTO_UDP);
+    _sock = new txSmartSocket_ (useTCP? socket (AF_INET, SOCK_STREAM, IPPROTO_IP) :
+                                        socket (AF_INET, SOCK_DGRAM, _broadcats? 0 : IPPROTO_UDP));
+    if (_sock == NULL)
+        return false;
 
-    if (_sock == INVALID_SOCKET) return false;
+    if (**_sock == INVALID_SOCKET)
+        {
+        delete _sock;
+
+        return false;
+        }
 
     char broadcast = _broadcats;
-    if (_broadcats) if (setsockopt (_sock, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof (broadcast)) == -1)
-        return perror ("setsockopt (SO_BROADCAST)"), 1;
+    if (_broadcats) if (setsockopt (**_sock, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof (broadcast)) == -1)
+        return false;
 
     _sock_addr = {};
 
@@ -551,12 +663,20 @@ bool TX_SOCKET :: _txInitAsClient (const char* IP, u_short port, sock_type block
     _sock_addr.sin_addr   = * (in_addr*) he->h_addr;
 
     if (useTCP)
-        if (connect (_sock, (sockaddr* ) &_sock_addr, sizeof (_sock_addr)) != 0) return false;
+        if (connect (**_sock, (sockaddr* ) &_sock_addr, sizeof (_sock_addr)) != 0)
+        {
+        delete _sock;
+        return false;
+        }
 
     if (blocking == TX_NONBLOCK)
         {
         u_long nonblocking = 1;
-        if (ioctlsocket (_sock, FIONBIO, &nonblocking) == SOCKET_ERROR) return false;
+        if (ioctlsocket (**_sock, FIONBIO, &nonblocking) == SOCKET_ERROR)
+            {
+            delete _sock;
+            return false;
+            }
         }
 
     return true;
@@ -570,7 +690,7 @@ int txSendTo (TX_SOCKET& to, const void* buf, int size_buf)
 
     if (to._broadcats)
         {
-        answ = sendto (to._sock, (const char*) buf, size_buf, 0, (sockaddr *) &to._sock_addr, sizeof (to._sock_addr));
+        answ = sendto (**(to._sock), (const char*) buf, size_buf, 0, (sockaddr *) &to._sock_addr, sizeof (to._sock_addr));
         return answ;
         }
 
@@ -578,8 +698,8 @@ int txSendTo (TX_SOCKET& to, const void* buf, int size_buf)
         {
         switch (to._type)
             {
-            case TX_SERVER:   answ = send (to._client_sock_for_serv, (const char*) buf, size_buf, 0); break;
-            case TX_CLIENT:   answ = send (to._sock,                 (const char*) buf, size_buf, 0); break;
+            case TX_SERVER:   answ = send (**(to._client_sock_for_serv), (const char*) buf, size_buf, 0); break;
+            case TX_CLIENT:   answ = send (**(to._sock),                 (const char*) buf, size_buf, 0); break;
 
             case TX_BLOCK:
             case TX_NONBLOCK: return TXN_ERROR;
@@ -591,7 +711,7 @@ int txSendTo (TX_SOCKET& to, const void* buf, int size_buf)
         }
 
     else
-        answ = sendto (to._sock, (const char*) buf, size_buf, 0, (sockaddr*) &to._sock_addr, sizeof (to._sock_addr));
+        answ = sendto (**(to._sock), (const char*) buf, size_buf, 0, (sockaddr*) &to._sock_addr, sizeof (to._sock_addr));
 
     return answ;
     }
@@ -603,15 +723,15 @@ int txRecvFrom (TX_SOCKET& to, void* buf, int size_buf)
     if (to._broadcats)
         {
         int SIZE_OF_STRUCTURE_FOR_XXX_WINDOWS = sizeof (to._sock_addr);
-        answ = recvfrom (to._sock, (char*) buf, size_buf, 0, (sockaddr*) &to._sock_addr, &SIZE_OF_STRUCTURE_FOR_XXX_WINDOWS);
+        answ = recvfrom (**(to._sock), (char*) buf, size_buf, 0, (sockaddr*) &to._sock_addr, &SIZE_OF_STRUCTURE_FOR_XXX_WINDOWS);
         }
 
     else if (to._TCP)
         {
         switch (to._type)
             {
-            case TX_SERVER:   answ = recv (to._client_sock_for_serv, (char*) buf, size_buf, 0); break;
-            case TX_CLIENT:   answ = recv (to._sock,                 (char*) buf, size_buf, 0); break;
+            case TX_SERVER:   answ = recv (**(to._client_sock_for_serv), (char*) buf, size_buf, 0); break;
+            case TX_CLIENT:   answ = recv (**(to._sock),                 (char*) buf, size_buf, 0); break;
 
             case TX_BLOCK:
             case TX_NONBLOCK: return TXN_ERROR;
@@ -624,16 +744,16 @@ int txRecvFrom (TX_SOCKET& to, void* buf, int size_buf)
     else
         {
         int SIZE_OF_STRUCTURE_FOR_XXX_WINDOWS = sizeof (to._sock_addr);
-        answ = recvfrom (to._sock, (char*) buf, size_buf, 0, (sockaddr*) &to._sock_addr, &SIZE_OF_STRUCTURE_FOR_XXX_WINDOWS);
+        answ = recvfrom (**(to._sock), (char*) buf, size_buf, 0, (sockaddr*) &to._sock_addr, &SIZE_OF_STRUCTURE_FOR_XXX_WINDOWS);
         }
 
     return answ;
     }
 
-TX_SOCKET txCreateSocket (sock_type type, const char* IP,
-                          int port /* = TX_STD_PORT*/, sock_type blocking /* = TX_BLOCK*/, bool useTCP /* = true*/)
+TX_SOCKET txCreateSocket (sock_type type, const char* IP/* = NULL*/,
+                          int port /* = TX_STD_PORT*/, sock_type blocking /* = TX_BLOCK*/, bool useTCP /* = true*/, const unsigned OueueSize/* = 0x10*/)
     {
-    return TX_SOCKET (type, IP, port, blocking, useTCP);
+    return TX_SOCKET (type, IP, port, blocking, useTCP, OueueSize);
     }
 
 int txnAssert (TX_SOCKET& asr)
@@ -660,16 +780,16 @@ int txChangeSockType (TX_SOCKET& to, sock_type blocking)
     return true;
     }
 
-SOCKET* txGetWinSocket (TX_SOCKET& what)
+SOCKET* txGetWinSocket (TX_SOCKET& what, bool main/* = true*/)
     {
     SOCKET* ret = NULL;
 
     switch (what._type)
         {
-        case TX_CLIENT: ret = &what._sock;                 break;
-        case TX_SERVER: ret = &what._client_sock_for_serv; break;
+        case TX_CLIENT: ret = &**(what._sock);                                          break;
+        case TX_SERVER: ret = main? &**(what._sock) : &**(what._client_sock_for_serv);  break;
 
-        default:        ret = &what._sock;                 break;
+        default:        ret = &**(what._sock);                                          break;
         }
 
     return ret;
@@ -678,7 +798,7 @@ SOCKET* txGetWinSocket (TX_SOCKET& what)
 //! @endcond
 //}
 
-//Dark side (Yes, we have cookies) (##--INTERANL--##)
+// Dark side (Yes, we have cookies) (##--INTERANL--##)
 //{
 //! @cond INTERNAL
 
@@ -703,7 +823,8 @@ void _txDestTX_NETWORK()
 
 #if !defined (__MODULE)
 
-    #define __MODULE "TXNetwork appilication using small TXLib.\n"                   // Ты это не видел. Забудь :)
+    #define __MODULE "TXNetwork appilication using small TXLib.\n"\
+                           \"#define __MODULE to set the name.\n"                   // Ты это не видел. Забудь :)
 
 #endif
 
@@ -725,7 +846,7 @@ void _txDestTX_NETWORK()
     #endif
 
     #ifndef __AUTHOR
-    #define __AUTHOR       "_RedMan_, 2015" "\n" \
+    #define __AUTHOR       "_RedMan_, 2015" "\n" "Ded, 2015" "\n" \
                            "#define __AUTHOR to override this name."
     #endif
 

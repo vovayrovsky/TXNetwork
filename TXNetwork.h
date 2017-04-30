@@ -406,7 +406,7 @@ class TX_SOCKET
     //! @param   buf       Буфер, который будет передан.
     //! @param   size_buf  Размер буфера.
     //!
-    //! @return  Код ошибки. Подробнее см. MSDN.
+    //! @return  Код ошибки. Если сокет TCP, то смотри вовращаемые значения функции send на MSDN.Если UDP, то sendto.
     //! @par     Пример 1
     //! @code
     //!          TX_SOCEKT game_server = txCreateSocket (...);    // Создаем сокет
@@ -445,7 +445,7 @@ class TX_SOCKET
     //! @param   buf       Буфер, который в будет записан массив.
     //! @param   size_buf  Размер буфера.
     //!
-    //! @return  Код ошибки. Подробнее см. MSDN.
+    //! @return  Код ошибки. Если сокет TCP, то смотри вовращаемые значения функции recv на MSDN.Если UDP, то recvfrom.
     //! @par     Пример 1
     //! @code
     //!          TX_SOCEKT game_server = txCreateSocket (...);      // Создаем сокет
@@ -823,7 +823,8 @@ void _txDestTX_NETWORK()
 
 #if !defined (__MODULE)
 
-    #define __MODULE "TXNetwork appilication using small TXLib.\n"                   // Ты это не видел. Забудь :)
+    #define __MODULE "TXNetwork appilication using small TXLib.\n"\
+                           \"#define __MODULE to set the name.\n"                   // Ты это не видел. Забудь :)
 
 #endif
 
@@ -845,7 +846,7 @@ void _txDestTX_NETWORK()
     #endif
 
     #ifndef __AUTHOR
-    #define __AUTHOR       "_RedMan_, 2015" "\n" \
+    #define __AUTHOR       "_RedMan_, 2015" "\n" "Ded, 2015" "\n" \
                            "#define __AUTHOR to override this name."
     #endif
 

@@ -1,5 +1,5 @@
 var modules =
 [
-    [ "Сокет TXNetwork", "a00017.htm", "a00017" ],
-    [ "Коды ошибок TXNetwork", "a00018.htm", "a00018" ]
+    [ "Сокет TXNetwork", "a00068.htm", "a00068" ],
+    [ "Коды ошибок TXNetwork", "a00069.htm", "a00069" ]
 ];
