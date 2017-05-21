@@ -1,0 +1,91 @@
+
+--------------------------------------------------
+TXLib предупреждает:
+
+Программа: C:\Users\User\Desktop\TXNetwork\NewFunc\server.exe,
+
+ВНЕЗАПНО: Нарушение доступа к памяти.
+
+#2: Исключение EXCEPTION_ACCESS_VIOLATION (0xC0000005) при выполнении кода по адресу 0x6E5F199B. Попытка прочесть данные по адресу 0x02D73C30. Спасибо _txVectoredExceptionHandler(), что сообщил. Люблю его <3
+
+#2: TXLib [Ver: 00173a, Rev: 105], Instance: 0x004FF434 (32-bit), Flags: CMdrE0, Thread: 0xB2C (Main), GetLastError(): 2 (Не удается найти указанный файл). 
+
+--------------------------------------------------
+Стек вызовов:
+
+
+
+--------------------------------------------------
+Стек вызовов TX:
+
+# 0 in int {anonymous}::TX::_txStackWalk(int, size_t, void**, long unsigned int*, CONTEXT*, HANDLE) at C:\Users\User\Desktop\TX\TXLib.h (9204):
+
+   9202: $   for (n = -framesToSkip; n < (int) szCapture; n++)
+   9203:         {
+=> 9204: $       DWORD64 prev = frame.AddrStack.Offset;
+   9205: 
+   9206:         // Я злой и страшный серый walk. Я в поросятах знаю talk.
+
+# 1 in const char* {anonymous}::TX::_txCaptureStackBackTrace(int, bool, CONTEXT*, HANDLE) at C:\Users\User\Desktop\TX\TXLib.h (9060):
+
+   9058: 
+   9059: $   static void* capture [maxFrames] = {};
+=> 9060: $   int frames = _txStackWalk (framesToSkip + !context, SIZEARR (capture), capture, NULL, context, thread);
+   9061: 
+   9062: $   memset (trace, 0, sizeof (trace));
+
+# 2 in long int {anonymous}::TX::_txOnExceptionSEH(EXCEPTION_POINTERS*, const char*) at C:\Users\User\Desktop\TX\TXLib.h (8577):
+
+   8575: $       unsigned err = GetLastError();
+   8576: 
+=> 8577: $       const char* stackTrace = _txCaptureStackBackTrace (0, true, exc->ContextRecord);
+   8578: 
+   8579: $       _txDumpExceptionSEH (_txDumpSE,  (ptrdiff_t) sizeof (_txDumpSE)  - 1, exc->ExceptionRecord, func);
+
+# 3 in bool {anonymous}::TX::_txSymGetFromAddr(void*, {anonymous}::TX::Win32::SYMBOL_INFO**, {anonymous}::TX::Win32::IMAGEHLP_LINE64**, const char**, const char**, int) at C:\Users\User\Desktop\TX\TXLib.h (9313):
+
+   9311: 
+   9312: $       SetLastError (0);
+=> 9313: $       (_TX_CALL (MinGW::SymFromAddr, (process, (uintptr_t) addr, &ofs, sym)) && RES_(y)) ||
+   9314:         (_TX_CALL (Win32::SymFromAddr, (process, (uintptr_t) addr, &ofs, sym)) && RES_(Y)) ||
+   9315:             DBG_("SymFromAddr (0x%p) failed", addr);
+
+# 4 in const char* {anonymous}::TX::_txCaptureStackBackTrace(int, bool, CONTEXT*, HANDLE) at C:\Users\User\Desktop\TX\TXLib.h (9077):
+
+   9075: $       bool                    inTX   = false;
+   9076: 
+=> 9077:         if (addr)                { $ inTX = _txSymGetFromAddr ((char*) addr - 1, &sym, &line, &module);          }
+   9078:         if (readSource && !inTX) { $        _txSymGetFromAddr ((void*) 1,        NULL, NULL,  NULL, &source, 2); }
+   9079: 
+
+# 5 in HBRUSH__* {anonymous}::TX::txSetFillColor(COLORREF, HDC) at C:\Users\User\Desktop\TX\TXLib.h (10112):
+
+  10110: HBRUSH txSetFillColor (COLORREF color, HDC dc /*= txDC()*/)
+  10111:     {
+=>10112: $1  if (_TX_DEFAULT_HDC_FAILED (dc)) return NULL;
+  10113: 
+  10114: $   HBRUSH brush = (color == TX_TRANSPARENT)? (HBRUSH) Win32::GetStockObject (HOLLOW_BRUSH) : Win32::CreateSolidBrush (color);
+
+# 6 in int main() at C:\Users\User\Desktop\TXNetwork\NewFunc\server.cpp (42):
+
+     40: 
+     41:     txSleep (25);
+=>   42:     txSetFillColor (TX_BLACK);
+     43:     txClear();
+     44:     }
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library) - TXLib [Ver: 00173a, Rev: 105]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	C:\Users\User\Desktop\TX\TXLib.h
+Compiled:	May  4 2017 13:09:13, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, DEBUG
+Started:	May 04 2017 14:11:01
+
+Run file:	C:\Users\User\Desktop\TXNetwork\NewFunc\server.exe
+Directory:	C:\Users\User\Desktop\TXNetwork\NewFunc
+
+--------------------------------------------------
